@@ -816,11 +816,14 @@ int runDither( int W, int H, int perturb, bool quiet = false )
 				if( std::fabs( expected - d ) > 1.0 / 128.0 + 1e-12 )
 					allOk = false;//the stated law's own promise
 			}
+			//The sample pass's tone for a flat grey is a float sum of at most
+			//a few dozen integer-weighted terms, a few ulp from the grey:
+			//1e-6 covers it with room, and it shifts every mean by at most that.
 			else if( dither == model::kFloydSteinberg )
-				bound = 0.5 * ( 22.0 / 16.0 * h + 18.0 / 16.0 * w + 2.0 ) / ( static_cast< double >( w ) * h );
+				bound = 0.5 * ( 22.0 / 16.0 * h + 18.0 / 16.0 * w + 2.0 ) / ( static_cast< double >( w ) * h ) + 1e-6;
 			else
 			{
-				bound = 0.125 + 0.5 * ( 10.0 * h + 10.0 * w ) / 8.0 / ( static_cast< double >( w ) * h );
+				bound = 0.125 + 0.5 * ( 10.0 * h + 10.0 * w ) / 8.0 / ( static_cast< double >( w ) * h ) + 1e-6;
 				if( d < 0.125 || d > 0.875 )
 				{
 					expected = d < 0.125 ? 0.0 : 1.0;
@@ -1334,6 +1337,17 @@ int runPrinting( int W, int H, int perturb, bool quiet = false )
 		s.end();
 
 		const long total = P( K, fps );
+		//floor( r t ) is only a statement where r t is not within a rounding
+		//of an integer (the plugin sums r dt frame by frame; the harness
+		//multiplies once). Asserted, not assumed.
+		double nearest = 1.0;
+		for( long f : { k0 - 1, k0, K } )
+		{
+			const double x = r * ( static_cast< double >( f ) / fps );
+			nearest        = std::min( nearest, std::fabs( x - std::round( x ) ) );
+		}
+		if( nearest < 1e-9 )
+			return failed + report( false, quiet, "%2.0f fps: r t lands within 1e-9 of a whole row; pick another speed", fps );
 		const int bandFrom = static_cast< int >( P( k0 - 1, fps ) - total + L.Rw ), bandTo = static_cast< int >( P( k0, fps ) - total + L.Rw );
 		const int topWant  = static_cast< int >( L.Rw - total );
 		int wrong = 0, topGot = -1;
