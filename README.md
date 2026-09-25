@@ -30,6 +30,50 @@ smear or a band: the rule across the whole head is pale because a row that fires
 that many dots sags the supply, and every mark trails a tail because its heaters
 are still warm on the rows after it.</sub>
 
+[![Receipt — the clip printed by a thermal receipt printer, for Resolume](docs/video-thumb.png)](https://www.youtube.com/watch?v=LjLpCcH3WSE)
+
+*[Watch it](https://www.youtube.com/watch?v=LjLpCcH3WSE) — 73 seconds:
+the skulls at the defaults, a receipt printing out of the slot in real time on the dancers
+(Printing, Tile) and tearing off, the three dithers on the skulls, heat carried until the rings
+thicken and trail tails and then History Control thinning them, dark footage at one, two, four
+and eight strobe blocks, slips breaking the rings into steps, an aged receipt on canary and pink
+paper, and a 58 mm roll with Mix down to the clip. Every frame is the real plugin's output: an
+FFGL plugin has no window, so the footage is rendered by this repository's own offline harness
+(`rctest --pipe`, driven by a cue sheet) rather than filmed off a screen, and the clips are
+Resolume's bundled demo media.*
+
+<!-- downloads:start -->
+
+## Download
+
+**[v0.1.0](https://github.com/stoatworks-labs/receipt/releases/tag/v0.1.0)** — prebuilt for macOS and Windows. Pick your platform:
+
+<details>
+<summary><b>macOS</b> — Universal (Apple Silicon + Intel)</summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| Universal (Apple Silicon + Intel) · .dmg disk image | [`receipt-0.1.0-macos-universal.dmg`](https://github.com/stoatworks-labs/receipt/releases/download/v0.1.0/receipt-0.1.0-macos-universal.dmg) | 212 KB |
+| Universal (Apple Silicon + Intel) · .zip archive | [`receipt-macos-universal.zip`](https://github.com/stoatworks-labs/receipt/releases/latest/download/receipt-macos-universal.zip) | 176 KB |
+
+</details>
+
+<details>
+<summary><b>Windows</b> — x64</summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| x64 · .exe installer | [`receipt-0.1.0-windows-x86_64-setup.exe`](https://github.com/stoatworks-labs/receipt/releases/download/v0.1.0/receipt-0.1.0-windows-x86_64-setup.exe) | 221 KB |
+| x64 · .zip archive | [`receipt-windows-x86_64.zip`](https://github.com/stoatworks-labs/receipt/releases/latest/download/receipt-windows-x86_64.zip) | 113 KB |
+
+</details>
+
+All builds, checksums and release notes: [github.com/stoatworks-labs/receipt/releases](https://github.com/stoatworks-labs/receipt/releases).
+
+macOS builds are signed and notarised and open normally. The Windows builds are unsigned, so SmartScreen warns once.
+
+<!-- downloads:end -->
+
 ## The one idea
 
 A thermal printer has a fixed line of tiny heaters — 8 to the millimetre, 576
