@@ -21,6 +21,11 @@
 #                 (`packed`) that Mesa refuses.
 #   offline       the control laws, the model's promises, the names a host
 #                 shows, and the cue sheet's kinds. No GL.
+#   demo          the browser demo's copy of every shader is still the
+#                 plugin's, character for character (demo/tools/check_shaders.py),
+#                 and its JavaScript port of the print engine agrees with the
+#                 plugin's own C++ exactly (demo/tools/check_port.sh; skipped
+#                 without node or a C++ compiler).
 #   physics       every rendered check, at TWO rasters: 320x180, which is what
 #                 CI renders at, and 1280x720. Each drives the real plugin and
 #                 reads the printer back out of the picture:
@@ -116,6 +121,29 @@ if out=$("$RCTEST" --offline 2>&1); then
 else
 	fail "rctest --offline"
 	printf '%s\n' "$out" | sed 's/^/      /'
+fi
+
+#---------------------------------------------------------------------------
+# The browser demo: its shaders are the plugin's, character for character, and
+# its port of the print engine agrees with the plugin's C++ exactly on
+# check_port's cases.
+#---------------------------------------------------------------------------
+step "demo"
+if out=$(python3 demo/tools/check_shaders.py 2>&1); then
+	pass "check_shaders.py: $( printf '%s\n' "$out" | tail -1 )"
+else
+	fail "the demo's shaders have drifted from source/Shaders.cpp -- run: python3 demo/tools/splice_shaders.py"
+	printf '%s\n' "$out" | sed 's/^/      /'
+fi
+out=$(demo/tools/check_port.sh 2>&1)
+status=$?
+if [ "$status" -eq 0 ]; then
+	pass "check_port.sh: $( printf '%s\n' "$out" | tail -1 )"
+elif [ "$status" -eq 3 ]; then
+	printf '   %s\n' "$( printf '%s\n' "$out" | tail -1 )"
+else
+	fail "demo/printer.js no longer agrees with the plugin's C++ -- run: demo/tools/check_port.sh"
+	printf '%s\n' "$out" | grep -v '^ok ' | sed 's/^/      /'
 fi
 
 CHECKS="dither history budget slip grid printing resize alpha negative"
