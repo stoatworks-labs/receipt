@@ -1964,6 +1964,35 @@ float valueAt( const Track& track, int frame, unsigned int type )
 }
 
 //---------------------------------------------------------------------------
+// --cues: the cue sheet's kinds, with no GL and no plugin render. This
+// plugin declares no boolean, and its only events are the About buttons,
+// which open a web browser -- so the step rules for those two kinds are
+// held here, on valueAt itself; verify.sh holds an option, an integer and a
+// slider through real --pipe runs.
+//---------------------------------------------------------------------------
+int runCues()
+{
+	std::printf( "== cues: sliders ramp; options, booleans and integers step; events fire on their frame (no GL)\n" );
+	int failed = 0;
+	const Track t = { { 0, 0.0f }, { 4, 1.0f }, { 8, 0.0f } };
+	failed += report( valueAt( t, 2, FF_TYPE_STANDARD ) == 0.5f && valueAt( t, 6, FF_TYPE_STANDARD ) == 0.5f, false, "a slider ramps: 0 -> 1 over frames 0..4 is 0.5 at 2, and back down by 6" );
+	bool steps = true;
+	for( unsigned int type : { FF_TYPE_OPTION, FF_TYPE_BOOLEAN, FF_TYPE_INTEGER } )
+		for( int f = 0; f <= 10; ++f )
+		{
+			const float want = f < 4 ? 0.0f : ( f < 8 ? 1.0f : 0.0f );
+			steps            = steps && valueAt( t, f, type ) == want;
+		}
+	failed += report( steps, false, "an option, a boolean and an integer hold the last cue at or before each of frames 0..10: no value between" );
+	const Track press = { { 3, 1.0f }, { 7, 1.0f } };
+	bool fires        = true;
+	for( int f = 0; f <= 10; ++f )
+		fires = fires && valueAt( press, f, FF_TYPE_EVENT ) == ( f == 3 || f == 7 ? 1.0f : 0.0f );
+	failed += report( fires, false, "an event is 1 on its cue frames (3 and 7) and 0 on every other" );
+	return failed;
+}
+
+//---------------------------------------------------------------------------
 void usage()
 {
 	std::printf(
@@ -1992,7 +2021,8 @@ void usage()
 		"  checks that need no GL:\n"
 		"  --laws              every control law against its statement; the model's promises\n"
 		"  --names             nothing the host will silently truncate; SW Receipt / RC01\n"
-		"  --offline           both; says loudly what it skipped. For CI.\n"
+		"  --cues              the cue sheet's kinds: sliders ramp, options/booleans/integers step, events fire\n"
+		"  --offline           all three; says loudly what it skipped. For CI.\n"
 		"  --allow-no-gl       with the rendering checks: SKIP loudly, not FAIL, when no GL 4.1 context exists\n"
 		"\n"
 		"  --bench             time ProcessOpenGL at 720p, 1080p and 4K, by stage\n"
@@ -2025,7 +2055,7 @@ int main( int argc, char** argv )
 	std::vector< std::string > checks;
 
 	const std::set< std::string > rendered = { "--dither", "--history", "--budget", "--slip", "--grid", "--printing", "--resize", "--alpha", "--negative" };
-	const std::set< std::string > offline  = { "--laws", "--names" };
+	const std::set< std::string > offline  = { "--laws", "--names", "--cues" };
 
 	for( int i = 1; i < argc; ++i )
 	{
@@ -2077,7 +2107,7 @@ int main( int argc, char** argv )
 		else if( argument == "--allow-no-gl" )
 			allowNoGL = true;
 		else if( argument == "--offline" )
-			for( const char* m : { "--laws", "--names" } )
+			for( const char* m : { "--laws", "--names", "--cues" } )
 				checks.push_back( m );
 		else if( rendered.count( argument ) || offline.count( argument ) )
 			checks.push_back( argument );
@@ -2118,6 +2148,8 @@ int main( int argc, char** argv )
 				runLaws();
 			else if( check == "--names" )
 				runNames();
+			else if( check == "--cues" )
+				runCues();
 			else
 			{
 				needGL = true;

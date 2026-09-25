@@ -133,7 +133,7 @@ Receipt::Receipt()
 	params[ PT_DENSITY ]       = 0.5f; //e0 = 1: a lone dot just saturates
 	params[ PT_HEAT_CARRY ]    = 0.4f; //c = 0.36
 	params[ PT_HISTORY ]       = 0.5f;
-	params[ PT_STROBE_BLOCKS ] = 4.0f; //144 dots a block on 80 mm: a solid row sags to 2/3
+	params[ PT_STROBE_BLOCKS ] = 2.0f; //288 dots a block on 80 mm: a solid row sags to a third, so dark footage prints a banded grey, not a black slab
 	params[ PT_PRINT_SPEED ]   = 0.4f; //about 42 mm/s
 	params[ PT_SLIP ]          = 0.15f;
 	params[ PT_MODE ]          = static_cast< float >( model::kStatic );
