@@ -11,7 +11,7 @@ tell anybody this works.
 A thermal receipt printer as an FFGL 2.1 effect (`RC01`, shown as `SW Receipt`) for
 Resolume Arena and Avenue. C++17 + GLSL 4.10, CMake, universal macOS `.bundle` (and a
 Windows `.dll` that CI will build once there is a repo to run it). MIT; intended home
-`github.com/stoatworks-labs/receipt`. Local v0.1.0, unreleased.
+`github.com/stoatworks-labs/receipt`. Released v0.1.0 on 2026-09-25.
 
 Built 2026-09-25 in one session (tranche five, an idea Allan picked) from
 `specs/SPEC-receipt.md` with `BRIEF.md` and `BRIEF-ADDENDUM.md`: toner for a print
@@ -338,9 +338,9 @@ binary.
 - **Parameter names** are the spec's, all ≤ 16 characters (`History Control` is 15).
 - **Strobe Blocks is a real integer 1..8**; blocks are floor(kN/S) wide, so 5 and 7
   blocks are unequal by a dot.
-- **Provisional About and attributions** (`StoatworksAbout.h`, `ATTRIBUTIONS.md`) are
-  hand copies adapted from toner's with `guide=""`, so three About buttons; the release
-  step registers the project and re-runs the syncs.
+- **About and attributions** (`StoatworksAbout.h`, `ATTRIBUTIONS.md`) began as hand copies
+  adapted from toner's; at release the project was registered and both were generated
+  by the fleet's syncs (four About buttons, the guide's URL in).
 - **The FFGL submodule was dissociated from the reference clone** (`repack -a -d`, the
   alternates file removed) so this repo does not depend on a path in `~/Projects`.
 - **`--cues`** holds the step rules for booleans and events on the cue code itself: this
@@ -413,11 +413,15 @@ and 1280×720 (and 320×180 on the software renderer, all passing).
   stall costs inside a real composition: all unmeasured.
 - **The printer's constants are chosen, not measured** (above).
 - **Feed jitter and re-strobing** are not modelled.
-- **Windows has never been built.** CI is written (MSVC, vcpkg GLEW) and cannot run
-  until there is a repo.
+- **Windows: gated, not shown.** CI's MSVC build compiled first time (vcpkg GLEW); the
+  release DLL passed the fleet's Arena gate 9/9 on win-lab (Arena 7.27.1, Mesa
+  llvmpipe, no GPU) with all 14 controls and Opacity live (Print Speed and Tear Length
+  under Mode Printing; `plugin-bench/arena/expect/receipt.json`). Nothing about a GPU
+  or speed on Windows.
 - **Footage judged by eye**, not measured; eight clips.
 - **Not verified at 4K**, only benchmarked there.
-- **No OpenFX port, no browser demo, no presets, no user guide** (not required for 0.1.0).
+- **No OpenFX port, no browser demo, no presets.** The user guide is `docs/USER-GUIDE.md`
+  (the website builds its page and `docs/USER-GUIDE.pdf` from it).
 - **The GPU wavefront's cost is an estimate**, not a measurement.
 - **Nothing has been through a show.**
 

@@ -14,7 +14,7 @@
 > scrolls by elapsed time, the same rows at 60, 50 and 30 frames a second; and a
 > resize mid-print keeps every printed dot — with a negative control per check
 > that proves each can fail, at two rasters and on the software renderer. It has
-> **never been loaded into Resolume**. It has been loaded by
+> **never been loaded into Resolume on macOS**. It has been loaded by
 > [oxbow](https://github.com/stoatworks-labs/oxbow), which is a real FFGL host and
 > is not Resolume. See [Status](#status).
 
@@ -82,8 +82,9 @@ shows round the receipt. A transparent clip prints blank paper.
 
 ## Status
 
-**v0.1.0, local and unreleased, 2026-09-25.** Built from the fleet's templates in
-one session. What `tools/verify.sh` establishes on this Mac (Apple M4 Max, macOS
+**v0.1.0, released 2026-09-25.** Built from the fleet's templates in one session.
+The [user guide](https://stoatworks-labs.com/software/receipt/guide/) covers every
+control. What `tools/verify.sh` establishes on this Mac (Apple M4 Max, macOS
 26.4), on a fresh universal build, at **320×180 and 1280×720**, and again at
 320×180 on Apple's software renderer:
 
@@ -119,14 +120,17 @@ white paper. Not measured.
 
 ### Not established
 
-It has **never been loaded into Resolume**. Everything above was compiled,
+It has **never been loaded into Resolume on macOS**. Everything above was compiled,
 rendered and measured offline against the real plugin class in a headless CGL
 context, plus an `oxbow` load. The read-back that feeds the CPU waits for the GPU;
 what that costs inside a real composition is unmeasured. The printer's constants
 (the paper's threshold and saturation, the heat's spread, the supply's budget)
 are chosen, not measured from a printer. Feed jitter is not modelled (slips are
-whole rows), and a dense row sags rather than being re-strobed. Windows has never
-been built. No OpenFX port, no browser demo, no presets, no user guide.
+whole rows), and a dense row sags rather than being re-strobed. On Windows, a build of
+this source loads, registers and renders in Resolume Arena 7.27.1 on software
+rendering (win-lab, no GPU), with every control as declared and all 14 moving the
+picture (the fleet's Arena gate, 9 of 9) — which says nothing about a GPU or about
+speed. No OpenFX port, no browser demo, no presets.
 
 ## Build
 
