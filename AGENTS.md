@@ -420,10 +420,47 @@ and 1280×720 (and 320×180 on the software renderer, all passing).
   or speed on Windows.
 - **Footage judged by eye**, not measured; eight clips.
 - **Not verified at 4K**, only benchmarked there.
-- **No OpenFX port, no browser demo, no presets.** The user guide is `docs/USER-GUIDE.md`
+- **No OpenFX port, no presets.** The user guide is `docs/USER-GUIDE.md`
   (the website builds its page and `docs/USER-GUIDE.pdf` from it).
 - **The GPU wavefront's cost is an estimate**, not a measurement.
 - **Nothing has been through a show.**
+
+---
+
+## The browser demo
+
+`demo/` is served at https://receipt-demo.stoatworks-labs.com/ (a Worker route over a
+proxied AAAA `100::` record; `deploy.yml` redeploys on a push to main). It is a page, not
+the plugin, and its two halves are not equally faithful:
+
+- **The shaders are the plugin's.** `kVertex`, `kSample` and `kDisplay` are spliced into
+  `demo/plugin.js` unedited (`demo/tools/splice_shaders.py`); `demo/tools/check_shaders.py`
+  compares them character for character and `tools/verify.sh` runs it.
+- **The print engine is a JavaScript PORT** (`demo/printer.js`) of `Model.h`, `Controls.cpp`,
+  `Printer.cpp` and the CPU half of `Receipt::ProcessOpenGL`, because a browser cannot run
+  the C++. Doubles, the same order of operations, no fused multiply-add (matching
+  `-ffp-contract=off`), floats wherever the C++ stores one.
+- **The port is checked against the C++, exactly.** `demo/tools/check_port.sh` builds
+  `refprint.cpp` against the unchanged `Printer.cpp` and `Controls.cpp` and against text it
+  cuts out of `Receipt.h` (Stats, ParamID, every private member) and `Receipt.cpp`
+  (floorDiv/floorMod, dataTones, printPaperRow, resetPrinting, and all of ProcessOpenGL, with
+  GL stubbed), then compares: 12 control laws at 1,012 host values, HashInt, SlipAt over
+  600,000 rows; every fired bit, float density and double heat over 566,784 dots of Printer;
+  and 473 frames of Static and Printing (every block count, all three dithers and fits, both
+  widths, slips at 1, the ring wrapped, a tear every few frames, a resize, a head change, a
+  clock that stalls, jumps and runs backwards) — the paper, the uploaded rows and every
+  uniform. All identical (2026-09-25). Mutations of printer.js it catches: Bayer's `>` as
+  `>=`, a stall keeping its last strike, 23 lead rows, a tear keeping the dither's error, a
+  slip-hash constant, heat reset each Printing frame, history control reassociated. Not
+  caught: two one-ulp reassociations (Floyd–Steinberg's tone plus error, the lateral
+  spread) that moved no bit and no float density on these cases, and three that are exact
+  equivalents. What it cannot see: the sample pass (its tones are the script's), and the
+  page's own GL calls.
+- **Gaps the page states:** its tones come from the browser's GPU, so an ulp can move a
+  dither decision and the dots are not evidence of the plugin's; Printing runs on the page's
+  clock with its unit declared (no unit vote); Strobe Blocks is a dropdown of 1..8; no clip
+  with transparency (the kit premultiplies, the plugin assumes straight alpha); the browser
+  scales the canvas; no Perturb hooks, forced slip or About block; no audio path.
 
 ---
 

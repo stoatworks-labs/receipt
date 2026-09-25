@@ -174,7 +174,21 @@ whole rows), and a dense row sags rather than being re-strobed. On Windows, a bu
 this source loads, registers and renders in Resolume Arena 7.27.1 on software
 rendering (win-lab, no GPU), with every control as declared and all 14 moving the
 picture (the fleet's Arena gate, 9 of 9) — which says nothing about a GPU or about
-speed. No OpenFX port, no browser demo, no presets.
+speed. No OpenFX port, no presets.
+
+## Browser demo
+
+**[receipt-demo.stoatworks-labs.com](https://receipt-demo.stoatworks-labs.com/)** — a
+page, not the plugin. The sample and display shaders are the plugin's own GLSL, run in
+WebGL2 (`demo/tools/check_shaders.py` fails verify if the page's copy drifts). The print
+engine, which the plugin runs on the CPU in C++, is **ported to JavaScript**
+(`demo/printer.js`) because a browser cannot run the C++; `demo/tools/check_port.sh`
+compiles the plugin's own `Printer.cpp` and `Controls.cpp`, and the feed and
+`ProcessOpenGL` cut out of `Receipt.cpp`, and finds the port's bits, densities, heat,
+paper and uniforms identical on its cases. The page lists what it does not reproduce:
+among them, its tones come from the browser's GPU, so a dot pattern there is not
+evidence of the plugin's; Printing runs on the page's clock; Strobe Blocks is a
+dropdown; no clip with transparency is offered.
 
 ## Build
 
