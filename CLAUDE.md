@@ -111,7 +111,7 @@ tolerances.
   `stoatworks-backend/resolume-demo/sync.sh receipt`.
 
 ## Not done yet
-- **Never loaded into Resolume.** Everything numeric is measured offline on macOS, plus an
+- **Never loaded into Resolume on macOS.** Everything numeric is measured offline on macOS, plus an
   `oxbow` load. Footage seen only through `--pipe` (eight of Resolume's demo clips), by eye.
 - Windows: CI builds it; the release DLL passed the Arena gate 9/9 on win-lab (software
   rendering). No OpenFX port, no presets.

@@ -407,7 +407,7 @@ and 1280×720 (and 320×180 on the software renderer, all passing).
 
 ### Assumed, or not done
 
-- ☠️ **Never loaded into Resolume.** Everything was compiled, rendered and measured
+- ☠️ **Never loaded into Resolume on macOS.** Everything was compiled, rendered and measured
   offline against the real plugin class in a headless CGL context, plus an `oxbow` load.
   How Resolume's clock arrives, whether a host leaves a PBO bound, what the read-back
   stall costs inside a real composition: all unmeasured.

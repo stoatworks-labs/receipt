@@ -307,7 +307,8 @@ Windows  %LOCALAPPDATA%\receipt\logs\receipt.YYYY-MM-DD.log
 - **Static starts every frame with a cold head** at the window's top: rows above the window aren't
   printed, so their heat and error aren't carried in.
 - **Rotate turns the clip one way only.**
-- **Only ever run on an Apple M4 Max**, although the macOS build contains an Intel slice.
+- **On a Mac I've only run it on Apple silicon** (an M4 Max, and CI's macOS runner), although
+  the macOS build contains an Intel slice.
 - **No presets, no OpenFX version.**
 - **There's a browser demo** at [receipt-demo.stoatworks-labs.com](https://receipt-demo.stoatworks-labs.com).
   It's a port to a web page, not the plugin: the shaders run in WebGL2, and the print engine is
